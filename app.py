@@ -3,18 +3,19 @@ import requests
 import json
 from cs50 import SQL
 
+
+app = Flask(__name__)
 db = SQL("sqlite:///data.db")
+
+x = int(db.execute("SELECT VALUE from X WHERE ID = 1")[0]['VALUE'])
+y = int(db.execute("SELECT VALUE from Y where ID = 1")[0]['VALUE'])
 
 @app.route("/")
 def main():
-    x = int(db.execute("SELECT VALUE from X WHERE ID = 1"))
-    y = int(db.execute("SELECT VALUE from Y where ID = 1"))
     return render_template("basic.html",x = x, y = y)
 
 @app.route("/calculate", methods = ['POST'])
 def calculate():
-    x = int(request.form.get('x'))
-    y = int(request.form.get('y'))
     operation = request.form.get('operation')
     if operation == "add":
         return redirect(url_for('add', x = x, y = y))
